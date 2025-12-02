@@ -1,16 +1,20 @@
-TOKEN = "7971006276:AAE5UiLXDdHhvLuTu9AeHZOLJRGlZF3TXkw"
+import os
+from dotenv import load_dotenv
 
-# Owner can add cards from Telegram
-OWNER_ID = 123456789  
+# Load environment variables from .env file
+load_dotenv()
 
-from utils.auth import is_admin_logged_in
+# Bot Configuration
+TOKEN: str = os.getenv("TELEGRAM_BOT_TOKEN", "")
+OWNER_ID: int = int(os.getenv("OWNER_ID", "123456789"))
 
-if not is_admin_logged_in(m.from_user.id):
-    await m.reply("🔒 You must login first.")
-    return
-  
-# Drop cooldown: 1 hour
-DROP_COOLDOWN_SECONDS = 3600
+# Drop Configuration
+DROP_COOLDOWN_SECONDS: int = int(os.getenv("DROP_COOLDOWN_SECONDS", "3600"))
+DROP_CHANCE_PER_MSG: float = float(os.getenv("DROP_CHANCE_PER_MSG", "0.005"))
 
-# Random drop chance per message
-DROP_CHANCE_PER_MSG = 0.005
+# Admin Configuration
+ADMIN_SESSION_EXPIRATION: int = int(os.getenv("ADMIN_SESSION_EXPIRATION", "1800"))
+
+# Validate critical configuration
+if not TOKEN:
+    raise ValueError("TELEGRAM_BOT_TOKEN environment variable is not set")
